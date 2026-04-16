@@ -30,7 +30,7 @@ const pool = mysql.createPool({
   host: process.env.MYSQL_HOST === 'localhost' ? '127.0.0.1' : (process.env.MYSQL_HOST || '127.0.0.1'),
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || '',
-  database: process.env.MYSQL_DATABASE || 'railway',
+  database: process.env.MYSQL_DATABASE || 'grow_ad',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -50,7 +50,7 @@ async function initDB() {
         port: 3306
       });
 
-      const dbName = process.env.MYSQL_DATABASE || 'railway';
+      const dbName = process.env.MYSQL_DATABASE || 'grow_ad';
       await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
       await connection.query(`USE ${dbName}`);
       
