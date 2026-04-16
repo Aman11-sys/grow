@@ -202,16 +202,11 @@ app.get('/api/:collection', async (req, res) => {
   }
 });
 
-app.use(express.static(path.join(__dirname, '../frontend')));
-
-// API Routes
-app.post('/api/:collection', async (req, res) => {
-// ... existing code ...
-});
+app.use(express.static(path.join(__dirname, '../')));
 
 // Fallback to serve index.html for any other routes (for SPA routing)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 app.listen(PORT, () => {

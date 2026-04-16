@@ -1,16 +1,27 @@
 {
-  "name": "grow-os-root",
-  "version": "1.0.0",
+  "name": "zero-touch-os",
+  "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
+    "dev:frontend": "vite",
+    "dev:backend": "node backend/index.js",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "start": "node backend/index.js",
-    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.7.1",
+    "chart.js": "^4.4.2",
+    "openai": "^4.0.0",
     "express": "^4.19.2",
     "mysql2": "^3.9.7",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "openai": "^4.0.0"
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.2.0"
   }
 }
