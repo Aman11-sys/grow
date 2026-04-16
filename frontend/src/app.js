@@ -17,23 +17,23 @@ app.controller('RootCtrl', ['$scope', function($scope) {
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
     .when('/onboarding', {
-      templateUrl: '/src/views/onboarding.html',
+      templateUrl: 'src/views/onboarding.html',
       controller: 'OnboardingCtrl'
     })
     .when('/calendar', {
-      templateUrl: '/src/views/calendar.html',
+      templateUrl: 'src/views/calendar.html',
       controller: 'CalendarCtrl'
     })
     .when('/captions', {
-      templateUrl: '/src/views/captions.html',
+      templateUrl: 'src/views/captions.html',
       controller: 'CaptionsCtrl'
     })
     .when('/festivals', {
-      templateUrl: '/src/views/festivals.html',
+      templateUrl: 'src/views/festivals.html',
       controller: 'FestivalsCtrl'
     })
     .when('/dashboard', {
-      templateUrl: '/src/views/dashboard.html',
+      templateUrl: 'src/views/dashboard.html',
       controller: 'DashboardCtrl'
     })
     .otherwise({
