@@ -1,0 +1,17 @@
+{
+  "name": "grow-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "openai": "^4.104.0"
+  }
+}
