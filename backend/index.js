@@ -75,7 +75,48 @@ async function initDB() {
         )
       `);
 
-      // ... existing table creation ...
+      // Table: calendars
+      await connection.query(`
+        CREATE TABLE IF NOT EXISTS calendars (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          profile_name VARCHAR(255),
+          plan JSON,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // Table: captions
+      await connection.query(`
+        CREATE TABLE IF NOT EXISTS captions (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          description TEXT,
+          captions JSON,
+          image TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // Table: festival_ideas
+      await connection.query(`
+        CREATE TABLE IF NOT EXISTS festival_ideas (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          festival_name VARCHAR(255),
+          industry VARCHAR(255),
+          idea TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // Table: insights
+      await connection.query(`
+        CREATE TABLE IF NOT EXISTS insights (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          metrics JSON,
+          insight TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
       console.log('Database schema verified/created successfully');
       await connection.end();
       return; 
