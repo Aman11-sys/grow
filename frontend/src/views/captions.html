@@ -1,0 +1,38 @@
+<div class="glass-card fade-in">
+  <div class="mb-4">
+    <h1 class="gradient-text">AI Caption Generator</h1>
+    <p class="text-muted">Instantly generate high-converting captions tailored to your brand's tone of voice.</p>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Drop your product description or image prompt below:</label>
+    <textarea ng-model="productDesc" class="form-textarea" placeholder="e.g. New arrival! Handcrafted vegan leather tote bag perfect for everyday use. Durable, stylish and 100% cruelty-free."></textarea>
+  </div>
+
+  <button class="btn-primary" ng-click="generateCaptions()" ng-disabled="loading || !productDesc">
+    <span ng-if="!loading">Generate Variations ✍️</span>
+    <span ng-if="loading">Writing Magic...</span>
+  </button>
+
+  <div ng-if="error" class="alert alert-error mt-2">{{ error }}</div>
+
+  <div ng-if="loading" class="loader-container mt-4">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div ng-if="productImage && !loading" class="mt-4">
+    <img ng-src="{{productImage}}" class="human-image fade-in" style="height: 250px; border-radius: 20px; box-shadow: var(--shadow-md);" alt="Product Image">
+  </div>
+
+  <div ng-if="captions.length > 0 && !loading" class="grid-3 mt-4">
+    <div class="glass-card" ng-repeat="caption in captions track by $index" style="position: relative; padding: 1.5rem;">
+      <div class="flex justify-between align-center border-b pb-1 mb-2" style="border-color: rgba(255,255,255,0.1);">
+        <span class="badge">Option {{ $index + 1 }}</span>
+        <button class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" ng-click="copyToClipboard(caption, $index)">
+          {{ copied === $index ? 'Copied!' : 'Copy' }}
+        </button>
+      </div>
+      <p style="white-space: pre-wrap; font-size: 0.95rem; line-height: 1.5;" class="mt-2">{{ caption }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="osApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Zero-Touch Growth Operating System MVP for NMIMS Innovathon 2026. Automate your business marketing and content.">
+  <title>Zero-Touch Growth OS</title>
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <link rel="stylesheet" href="/src/styles.css">
+  
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+</head>
+<body ng-controller="RootCtrl" ng-class="{'dark-mode': isDarkMode}">
+
+  <!-- Navbar -->
+  <nav class="glass-nav">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="gradient-text text-xl font-outfit font-bold">Zero-Touch OS</span>
+      </div>
+      <div class="nav-links flex align-center">
+        <a href="#!/onboarding" class="nav-link">Onboarding</a>
+        <a href="#!/calendar" class="nav-link">Calendar</a>
+        <a href="#!/captions" class="nav-link">Captions</a>
+        <a href="#!/festivals" class="nav-link">Festivals</a>
+        <a href="#!/dashboard" class="nav-link">Dashboard</a>
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle ml-2" ng-click="toggleTheme()" title="Toggle Dark/Light Mode">
+          <span ng-if="!isDarkMode">🌙</span>
+          <span ng-if="isDarkMode">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main View -->
+  <main class="main-content" ng-view>
+  </main>
+
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>

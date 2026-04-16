@@ -1,0 +1,27 @@
+<div class="glass-card fade-in">
+  <div class="mb-4">
+    <h1 class="gradient-text">Festival & Trend Detector</h1>
+    <p class="text-muted">Upcoming occasions in the next 30 days. Capitalize on these events with AI-generated campaign ideas.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="glass-card" ng-repeat="fest in festivals" style="padding: 1.5rem;">
+      <div class="flex justify-between align-center mb-2">
+        <div>
+          <h3 class="font-outfit m-0" style="color: var(--accent-1);">{{ fest.name }}</h3>
+          <span class="text-sm opacity-70">🗓️ {{ fest.date }}</span>
+        </div>
+        <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;" ng-click="generateIdea(fest)" ng-disabled="loadingIdeaFor === fest.name">
+          {{ loadingIdeaFor === fest.name ? 'Thinking...' : 'Generate Idea 💡' }}
+        </button>
+      </div>
+      <p class="text-sm text-muted m-0">{{ fest.description }}</p>
+      
+      <!-- Generated Idea Section -->
+      <div class="result-box fade-in mt-2" ng-if="activeIdea.festival === fest.name" style="border-left: 3px solid var(--accent-2);">
+        <p class="m-0 text-sm" style="font-weight: 500;">Campaign Suggestion:</p>
+        <p class="text-sm mt-1 mb-0 opacity-90 italic">"{{ activeIdea.text }}"</p>
+      </div>
+    </div>
+  </div>
+</div>
