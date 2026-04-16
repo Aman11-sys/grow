@@ -16,79 +16,27 @@ const openai = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey, dangerouslyAllo
 services.factory('AIService', ['$q', function($q) {
   return {
     generateContent: async function(prompt, type = 'general') {
-      // Prioritize OpenAI if key is present
-      if (openai) {
-        try {
-          const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [{ role: "user", content: prompt }],
-          });
-          
-          let text = response.choices[0].message.content;
-          
-          // Clean markdown from AI response if it exists
-          if (text.includes("```json")) {
-            text = text.split("```json")[1].split("```")[0].trim();
-          } else if (text.includes("```")) {
-            text = text.split("```")[1].split("```")[0].trim();
-          }
-
-          try {
-            return JSON.parse(text);
-          } catch(e) {
-            return text;
-          }
-        } catch (err) {
-          console.error("OpenAI API Error", err);
-          throw new Error("OpenAI Generation failed. Check your API key.");
+      try {
+        const response = await fetch(`${API_URL}/ai/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, type })
+        });
+        
+        if (!response.ok) {
+           const err = await response.json();
+           throw new Error(err.message || "AI Generation Failed");
         }
-      }
-
-      // Fallback to Gemini
-      if (genAI) {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        try {
-          const result = await model.generateContent(prompt);
-          const response = await result.response;
-          const text = response.text();
-          
-          if (text.includes("```json")) {
-             const jsonStr = text.split("```json")[1].split("```")[0].trim();
-             return JSON.parse(jsonStr);
-          }
-          
-          try {
-             return JSON.parse(text);
-          } catch(e) {
-             return text;
-          }
-        } catch (e) {
-          console.error("Gemini API Error", e);
-          throw new Error("AI Generation failed. Check your API key.");
+        
+        return await response.json();
+      } catch (err) {
+        console.error("AI Service Error:", err);
+        // Fallback for safety if backend is down
+        if (type === 'profile') {
+          return { name: "Mock Business (Backend Down)", industry: "Error Recovery", usp: "Check backend connectivity", targetPersona: "Unknown", toneOfVoice: "Neutral" };
         }
+        throw err;
       }
-
-      // Mock Fallback
-      console.warn("No AI API Keys found. Returning mock response.");
-      return new Promise(resolve => {
-        setTimeout(() => {
-          if (type === 'profile') {
-            resolve({
-              name: "Mock Business",
-              industry: "E-commerce",
-              usp: "Fast and reliable mock products",
-              targetPersona: "Mock Users aged 18-35",
-              toneOfVoice: "Playful"
-            });
-          } else if (type === 'calendar') {
-             resolve([{ day: 1, platform: "Instagram", theme: "Welcome", pillar: "Brand", time: "9AM", festival: "None" }]);
-          } else if (type === 'captions') {
-             resolve(["Captivating caption 1", "Engaging caption 2", "Trendy caption 3"]);
-          } else {
-            resolve("This is a mock AI response because no API keys were configured.");
-          }
-        }, 1000);
-      });
     }
   };
 }]);

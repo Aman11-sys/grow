@@ -5,11 +5,16 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import OpenAI from 'openai';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
+
+const openai = new OpenAI({
+  apiKey: process.env.VITE_OPENAI_API_KEY || process.env.OPENAI_API_KEY
+});
 
 const app = express();
 app.use(cors({
@@ -83,6 +88,40 @@ async function initDB() {
 }
 
 initDB();
+
+// AI Generation Route
+app.post('/api/ai/generate', async (req, res) => {
+  const { prompt } = req.body;
+  
+  if (!openai.apiKey) {
+    return res.status(500).json({ error: 'OpenAI API key missing on server' });
+  }
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+    });
+    
+    let text = response.choices[0].message.content;
+    
+    // Clean markdown
+    if (text.includes("```json")) {
+      text = text.split("```json")[1].split("```")[0].trim();
+    } else if (text.includes("```")) {
+      text = text.split("```")[1].split("```")[0].trim();
+    }
+
+    try {
+      res.json(JSON.parse(text));
+    } catch(e) {
+      res.json({ result: text });
+    }
+  } catch (err) {
+    console.error("AI Generation Error:", err);
+    res.status(500).json({ error: 'AI Generation failed', message: err.message });
+  }
+});
 
 // Generic API Routes
 app.post('/api/:collection', async (req, res) => {
