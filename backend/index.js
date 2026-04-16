@@ -11,7 +11,10 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ['https://grow-five-beryl.vercel.app', 'https://grow-production.up.railway.app', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
 
 const PORT = process.env.BACKEND_PORT || 3000;
