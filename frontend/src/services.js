@@ -102,7 +102,11 @@ services.factory('DBService', ['$q', function($q) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-        if (!response.ok) throw new Error('Failed to save to MySQL');
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Server Error Details:', errorData);
+          throw new Error(`Failed to save to MySQL: ${errorData.message || 'Unknown Error'}`);
+        }
         return await response.json();
       } catch (e) {
         console.error("Error saving to MySQL: ", e);
