@@ -203,6 +203,7 @@ app.get('/api/:collection', async (req, res) => {
 });
 
 app.use(express.static(path.join(__dirname, '../')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Fallback to serve index.html for any other routes (for SPA routing)
 app.get('*', (req, res) => {
