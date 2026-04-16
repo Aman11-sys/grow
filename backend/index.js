@@ -199,6 +199,18 @@ app.get('/api/:collection', async (req, res) => {
   }
 });
 
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// API Routes
+app.post('/api/:collection', async (req, res) => {
+// ... existing code ...
+});
+
+// Fallback to serve index.html for any other routes (for SPA routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
