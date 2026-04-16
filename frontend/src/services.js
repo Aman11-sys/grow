@@ -4,7 +4,7 @@ import OpenAI from "openai";
 const services = angular.module('osServices', []);
 
 // Backend API Setup
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://grow-production.up.railway.app/api';
 
 // AI Providers Setup
 const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
