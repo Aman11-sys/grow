@@ -1,0 +1,64 @@
+<div class="fade-in">
+  <div class="flex justify-between align-center mb-4">
+    <div>
+      <h1 class="gradient-text">Performance Dashboard</h1>
+      <p class="text-muted">Simulated metrics overview for your ad campaigns.</p>
+    </div>
+    
+    <button class="btn-primary" style="background: linear-gradient(135deg, #10b981, #059669);" ng-click="generateInsight()" ng-disabled="loading">
+      <span ng-if="!loading">Analyze Performance 🧠</span>
+      <span ng-if="loading">Processing Data...</span>
+    </button>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid-4 mb-4">
+    <div class="glass-card text-center" style="padding: 1.5rem;">
+      <p class="text-muted text-sm text-uppercase m-0">Click-Through Rate</p>
+      <h2 class="m-0 mt-1" style="color: #60a5fa;">{{ metrics.ctr }}%</h2>
+    </div>
+    <div class="glass-card text-center" style="padding: 1.5rem;">
+      <p class="text-muted text-sm text-uppercase m-0">Cost Per Click (₹)</p>
+      <h2 class="m-0 mt-1" style="color: #f472b6;">{{ metrics.cpc }}</h2>
+    </div>
+    <div class="glass-card text-center" style="padding: 1.5rem;">
+      <p class="text-muted text-sm text-uppercase m-0">ROAS</p>
+      <h2 class="m-0 mt-1" style="color: #34d399;">{{ metrics.roas }}x</h2>
+    </div>
+    <div class="glass-card text-center" style="padding: 1.5rem;">
+      <p class="text-muted text-sm text-uppercase m-0">Conversion Rate</p>
+      <h2 class="m-0 mt-1" style="color: #fbbf24;">{{ metrics.conversion }}%</h2>
+    </div>
+  </div>
+
+  <!-- AI Insight Banner -->
+  <div class="glass-card mb-4 fade-in" style="border: 1px solid var(--accent-1); background: rgba(59, 130, 246, 0.1);" ng-if="insight || loading">
+    <div class="flex align-center gap-2">
+      <div style="font-size: 2.5rem;">🤖</div>
+      <div class="w-full">
+        <h3 class="m-0 font-outfit" style="color: #93c5fd;">AI Marketing Insight</h3>
+        <p class="m-0 mt-1" ng-if="insight">{{ insight }}</p>
+        <div ng-if="loading" class="mt-1 flex align-center gap-1">
+          <div class="loading-spinner" style="width: 16px; height: 16px;"></div>
+          <span class="text-muted text-sm">Generating actionable insights...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid-2">
+    <div class="glass-card">
+      <h3 class="font-outfit mb-2 mt-0">Weekly Clicks</h3>
+      <div style="position: relative; height: 300px;">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+    <div class="glass-card">
+      <h3 class="font-outfit mb-2 mt-0">Daily Conversions</h3>
+      <div style="position: relative; height: 300px;">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

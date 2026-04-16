@@ -1,0 +1,91 @@
+<div class="glass-card fade-in">
+  <div class="mb-4">
+    <h1 class="gradient-text">Business Onboarding</h1>
+    <p class="text-muted">Tell us about your business to initialize your Zero-Touch Growth OS.</p>
+  </div>
+
+  <div class="grid-2">
+    <!-- Form Side -->
+    <div>
+      <form ng-submit="submitForm()">
+        <div class="form-group">
+          <label class="form-label">Business Name</label>
+          <input type="text" ng-model="formData.name" class="form-input" required placeholder="e.g. EcoSpark" />
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Website URL</label>
+          <input type="url" ng-model="formData.website" class="form-input" placeholder="https://ecospark.com" />
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Business Type / Industry</label>
+          <input type="text" ng-model="formData.type" class="form-input" required placeholder="e.g. Sustainable Fashion" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Audience</label>
+          <input type="text" ng-model="formData.audience" class="form-input" required placeholder="e.g. Gen Z eco-conscious buyers" />
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">City/Region</label>
+            <input type="text" ng-model="formData.city" class="form-input" placeholder="e.g. Mumbai" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Key Products/Services</label>
+          <textarea ng-model="formData.products" class="form-textarea" required placeholder="e.g. Organic cotton t-shirts, recycled bags..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary w-full" ng-disabled="loading">
+          <span ng-if="!loading">Generate AI Profile ✨</span>
+          <span ng-if="loading">Processing...</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Results Side -->
+    <div class="pl-4 border-l border-white-10" style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 1.5rem;">
+      <h3 class="font-outfit mb-2">AI Business Profile</h3>
+      
+      <div ng-if="loading" class="loader-container">
+        <div class="loading-spinner"></div>
+        <p class="mt-1 text-sm">Analyzing business data...</p>
+      </div>
+
+      <div ng-if="error" class="alert alert-error">
+        {{ error }}
+      </div>
+
+      <div ng-if="!loading && !result && !error" class="text-center mt-4">
+        <div style="font-size: 3rem; opacity: 0.5;">🤖</div>
+        <p class="text-muted mt-1">Submit the form to generate your AI-optimized profile.</p>
+      </div>
+
+      <div ng-if="result && !loading" class="result-box fade-in">
+        <img ng-src="{{businessImage}}" class="human-image fade-in" ng-if="businessImage" alt="Business inspiration image" />
+        <p><strong>Name:</strong> <span class="gradient-text">{{ result.name }}</span></p>
+        <p class="mt-1"><strong>Industry:</strong> <span class="badge">{{ result.industry }}</span></p>
+        <p class="mt-1"><strong>Tone of Voice:</strong> <span class="badge">{{ result.toneOfVoice }}</span></p>
+        
+        <div class="mt-2">
+          <strong>Unique Selling Proposition (USP):</strong>
+          <p class="text-muted text-sm mt-1">{{ result.usp }}</p>
+        </div>
+        
+        <div class="mt-2">
+          <strong>Target Persona:</strong>
+          <p class="text-muted text-sm mt-1">{{ result.targetPersona }}</p>
+        </div>
+
+        <button class="btn-secondary w-full mt-4 flex justify-between align-center" ng-click="continueToCalendar()">
+          <span>Proceed to Calendar</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

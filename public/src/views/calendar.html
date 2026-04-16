@@ -1,0 +1,48 @@
+<div class="glass-card fade-in">
+  <div class="flex justify-between align-center mb-4">
+    <div>
+      <h1 class="gradient-text">Weekly Content Calendar</h1>
+      <p class="text-muted">AI-generated 7-day social media plan based on your profile.</p>
+    </div>
+    <button class="btn-primary" ng-click="generateCalendar()" ng-disabled="loading">
+      <span ng-if="!loading">Generate Calendar 🗓️</span>
+      <span ng-if="loading">Generating...</span>
+    </button>
+  </div>
+
+  <div ng-if="error" class="alert alert-error">{{ error }}</div>
+
+  <div ng-if="loading" class="loader-container" style="height: 300px;">
+    <div class="loading-spinner mb-2"></div>
+    <p>Structuring your 7-day master plan...</p>
+  </div>
+
+  <div ng-if="!loading && calendar.length === 0 && !error" class="text-center" style="padding: 4rem;">
+    <div style="font-size: 3rem; opacity: 0.5;">📅</div>
+    <p class="text-muted mt-2">No calendar generated yet. Click the button above.</p>
+  </div>
+
+  <div ng-if="calendar.length > 0 && !loading" class="grid-3 mt-4">
+    <div class="glass-card" ng-repeat="day in calendar" style="padding: 1.5rem;">
+      <div class="flex justify-between align-center border-b pb-1 mb-2" style="border-color: rgba(255,255,255,0.1);">
+        <h3 class="font-outfit m-0">Day {{ day.day || $index + 1 }}</h3>
+        <span class="badge">{{ day.platform }}</span>
+      </div>
+      
+      <div class="mb-1">
+        <span class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Theme</span>
+        <p class="m-0" style="font-weight: 500;">{{ day.theme }}</p>
+      </div>
+      
+      <div class="mb-1">
+        <span class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Content Pillar</span>
+        <p class="m-0 text-sm">{{ day.pillar }}</p>
+      </div>
+      
+      <div class="flex justify-between align-center mt-2 pt-2 border-t" style="border-color: rgba(255,255,255,0.05);">
+        <span class="text-sm opacity-70">🕒 {{ day.time }}</span>
+        <span class="text-xs" style="color: #fbbf24;" ng-if="day.festival && day.festival !== 'None'">🎉 {{ day.festival }}</span>
+      </div>
+    </div>
+  </div>
+</div>
