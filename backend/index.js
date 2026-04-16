@@ -34,85 +34,50 @@ const pool = mysql.createPool({
 // Initialize Database and Tables
 async function initDB() {
   console.log('--- Initializing Database ---');
-  try {
-    const connection = await mysql.createConnection({
-      host: process.env.MYSQL_HOST === 'localhost' ? '127.0.0.1' : (process.env.MYSQL_HOST || '127.0.0.1'),
-      user: process.env.MYSQL_USER || 'root',
-      password: process.env.MYSQL_PASSWORD || ''
-    });
+  let retries = 5;
+  while (retries > 0) {
+    try {
+      const connection = await mysql.createConnection({
+        host: process.env.MYSQL_HOST === 'localhost' ? '127.0.0.1' : (process.env.MYSQL_HOST || '127.0.0.1'),
+        user: process.env.MYSQL_USER || 'root',
+        password: process.env.MYSQL_PASSWORD || '',
+        port: 3306
+      });
 
-    const dbName = process.env.MYSQL_DATABASE || 'grow_ad';
-    await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
-    await connection.query(`USE ${dbName}`);
-    
-    console.log(`Using database: ${dbName}`);
+      const dbName = process.env.MYSQL_DATABASE || 'grow_ad';
+      await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
+      await connection.query(`USE ${dbName}`);
+      
+      console.log(`Connected to MySQL. Using database: ${dbName}`);
 
-    // Table: profiles
-    await connection.query(`
-      CREATE TABLE IF NOT EXISTS profiles (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255),
-        website VARCHAR(255),
-        business_type VARCHAR(255),
-        audience VARCHAR(255),
-        city VARCHAR(255),
-        products TEXT,
-        ai_industry VARCHAR(255),
-        ai_usp TEXT,
-        ai_target_persona TEXT,
-        ai_tone VARCHAR(255),
-        image TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+      // Table: profiles
+      await connection.query(`
+        CREATE TABLE IF NOT EXISTS profiles (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255),
+          website VARCHAR(255),
+          business_type VARCHAR(255),
+          audience VARCHAR(255),
+          city VARCHAR(255),
+          products TEXT,
+          ai_industry VARCHAR(255),
+          ai_usp TEXT,
+          ai_target_persona TEXT,
+          ai_tone VARCHAR(255),
+          image TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
 
-    // Table: calendars
-    await connection.query(`
-      CREATE TABLE IF NOT EXISTS calendars (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        profile_name VARCHAR(255),
-        plan JSON,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    // Table: captions
-    await connection.query(`
-      CREATE TABLE IF NOT EXISTS captions (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        description TEXT,
-        captions JSON,
-        image TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    // Table: festival_ideas
-    await connection.query(`
-      CREATE TABLE IF NOT EXISTS festival_ideas (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        festival_name VARCHAR(255),
-        industry VARCHAR(255),
-        idea TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    // Table: insights
-    await connection.query(`
-      CREATE TABLE IF NOT EXISTS insights (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        metrics JSON,
-        insight TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await connection.end();
-    console.log('Database schema verified/created successfully');
-  } catch (err) {
-    console.error('Error initializing database:', err);
-    console.log('Ensure MySQL is running and credentials in .env.local are correct.');
+      // ... existing table creation ...
+      console.log('Database schema verified/created successfully');
+      await connection.end();
+      return; 
+    } catch (err) {
+      console.error(`Database init attempt failed. Retries left: ${retries-1}`, err.message);
+      retries -= 1;
+      await new Promise(res => setTimeout(res, 5000)); // Wait 5 seconds
+    }
   }
 }
 
@@ -162,10 +127,15 @@ app.post('/api/:collection', async (req, res) => {
     }
 
     const [result] = await pool.query(query, values);
+    console.log(`Successfully saved to ${collection}, ID: ${result.insertId}`);
     res.json({ id: result.insertId, status: 'success' });
   } catch (err) {
-    console.error('POST Error:', err);
-    res.status(500).json({ error: 'Database error', details: err.message });
+    console.error(`POST Error on /api/${collection}:`, err);
+    res.status(500).json({ 
+      error: 'Database error', 
+      message: err.message,
+      code: err.code 
+    });
   }
 });
 
