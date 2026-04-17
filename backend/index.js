@@ -31,7 +31,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || process.env.BACKEND_PORT || 8080;
 
 // MySQL Connection Pool
 const pool = mysql.createPool({
